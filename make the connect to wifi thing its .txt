@@ -1,0 +1,5 @@
+make the connect to wifi thing its own function, wrap the request call in a try/catch, reconnect and make request if catches exception.
+
+or check connection whenever button pushed
+
+wrap the initial connect in try/connect, and wait 5-10 minutes if connection fails - or always wait?
