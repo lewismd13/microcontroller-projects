@@ -33,8 +33,17 @@ for network in wifi.radio.start_scanning_networks():
     )
 wifi.radio.stop_scanning_networks()
 
+
+def connect_attempt():
+    try:
+        wifi.radio.connect(secrets["ssid"], secrets["password"])
+    except Exception:
+        time.sleep(300)
+        wifi.radio.connect(secrets["ssid"], secrets["password"])
+
+
 print("Connecting to %s" % secrets["ssid"])
-wifi.radio.connect(secrets["ssid"], secrets["password"])
+connect_attempt()
 print("Connected to %s!" % secrets["ssid"])
 print("My IP address is", wifi.radio.ipv4_address)
 
@@ -57,12 +66,16 @@ while True:
     print(button.value)
     if not button.value:
         pixels[0] = (255, 0, 0)
-        time.sleep(0.3)
-        response = requests.get(OUTLET_URL)
+        time.sleep(0.2)
+        try:
+            response = requests.get(OUTLET_URL)
+        except:
+            wifi.radio.connect(secrets["ssid"], secrets["password"])
+            response = requests.get(OUTLET_URL)
         pixels[0] = (0, 0, 0)
     else:
         # r_value = random.randint(0, 255)
         # g_value = random.randint(0, 255)
         # b_value = random.randint(0, 255)
         # pixels[0] = (r_value, g_value, b_value)
-        time.sleep(0.3)
+        time.sleep(0.2)
